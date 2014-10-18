@@ -1,7 +1,6 @@
 module.exports = function(app) {
 	var appServerController = app.controllers.appServerController;
 
-	//TODO: alterar para ter um filtro para validar se versão é valida
 	app.get('/api/:version/appServers', appServerController.list);
 	app.get('/api/:version/appServers/:id', appServerController.show);
 	app.get('/api/:version/appServers/:id/applications', appServerController.applications);

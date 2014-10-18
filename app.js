@@ -1,29 +1,41 @@
+//Módulos básicos
 var express = require('express');
-var path = require('path');
 var load = require('express-load')
-var logger = require('morgan');
+var morgan = require('morgan');
+
+//Módulos de HTTP
+var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var connect = require('connect');
+var methodOverride = require('method-override');
+var compression = require('compression');
+
+//Meus módulos
 var mongo = require('./utils/mongo'); // Setup mongodb connection
+var filters = require('./utils/filters'); // Setup mongodb connection
 
 var app = express();
 
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(logger('dev'));
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(methodOverride('_method')) // Sobrecarrega o metodo HTTP com o parametro _method
+app.use(compression({ threshold: 512 })) // comprime responses com mais de 512KB
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req, res, next) {
-  res.contentType('application/json');
-  next();
-});
+/**
+Filtro executado antes de todas as chamadas a API para validar
+se a versão requisitada existe e é valida. Caso não exista
+Bad Request é retornado com mensagem descritiva
+*/
+app.all(/^\/(api)\/.*$/, filters.versionFilter);
+app.all(/^\/(api)\/.*$/, filters.basicAuthFilter);
 
-//TODO: implementar filtro de autenticação Basic auth
 //Loading controllers and routes
 load('controllers').then('routes').into(app)
 

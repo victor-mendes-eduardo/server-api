@@ -1,16 +1,32 @@
-//TODO: adicionar timesttamsp
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+//TODO: customizar mensagens
 
-var AppServerSchema = new Schema({
-	name: { type: String, required: true }, // TODO: deve ser unique
-	status: { type: String, required: true }, // TODO: validar Status
-	ipAddress: { type: String, required: true }, // TODO: validar IP
+var mongoose = require('mongoose');
+
+var ipAddressRegex = /^(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))$/;
+var possibleStatus = 'RUNNING STOPPED'.split(' ');
+
+var AppServerSchema = new mongoose.Schema({
+	name: { type: String, required: true, notEmpty: true , unique: true },
+	status: { type: String, required: true, notEmpty: true , enum: possibleStatus },
+	ipAddress: { type: String, required: true, notEmpty: true, unique: true , match: ipAddressRegex },
 	applications: [{type: mongoose.Schema.Types.ObjectId, ref: 'Application'}],
-	tags: Array
+	tags: [String], 
+	creationDate: Date, 
+	lastUpdated: Date
 });
 
-// Representação do objeto para a 'view' para desacoplar do modelo do mongoDB
+AppServerSchema.plugin(require('mongoose-unique-validator'));
+
+//Atualiza timestamps de criação e atualização após validação do objeto
+AppServerSchema.post('validate', function (appServer) {
+	appServer.lastUpdated = new Date();
+	if(appServer.creationDate == null){
+		appServer.creationDate = new Date();
+	}
+})
+
+
+// Representação do objeto para a 'view' para desacoplar do Schema do mongoDB
 AppServerSchema.methods.toJson = function() {
   return {
 		id: this._id,

@@ -1,19 +1,9 @@
 var validationHandler = require('../utils/validationHandler');
+var rest = require('../utils/restHelper');
 
-//TODO: refatorar respostas para remover duplicação
 module.exports = function(app){
 
 	return {
-
-		// Retorna lista de Servidores de aplicação
-		list: function(req, res) {
-			var appServerService = getService('appServer', req.params.version);
-
-			appServerService.list(function(appServers){
-				res.json(appServers); 
-			});
-		},
-
 		// Exibe um Servidor dado um ID 
 		show: function(req, res){
 			var appServerService = getService('appServer', req.params.version);
@@ -22,8 +12,7 @@ module.exports = function(app){
 				if(appServer){
 					res.json(appServer); 
 				}else{
-					res.statusCode = 404;
-					res.send({ status: res.statusCode, message:"Servidor não encontrado" });
+					rest.notFound(res, "Servidor não encontrado");
 				}
 			});
 		},
@@ -33,19 +22,15 @@ module.exports = function(app){
 			var appServerService = getService('appServer', req.params.version);
 
 			var success = function(appServer){
-				res.location('/api/'+req.params.version + '/appServer/' + appServer._id);
-				res.statusCode = 201;
-				res.send({ status: res.statusCode, message:"Servidor criado com sucesso", id: appServer.id });
+				rest.created(res, "Servidor criado com sucesso", { name: 'appServer', id: appServer._id, version: req.params.version });
 			}
 
 			var error = function(appServer, errors){
-				res.statusCode = 400;
-				var errors = validationHandler.buildErrorReport(errors);
-				var errorReport = { status: res.statusCode, message:"Dados inválidos", errors: errors };
-				res.send(errorReport);
+				errors = validationHandler.buildErrorReport(errors);
+				rest.badRequest(res, "Dados inválidos", errors);
 			}
 
-			appServerService.create(req.body, success, error)
+			appServerService.create(req.body, success, error);
 		},
 
 		// Atualiza um servidor
@@ -53,18 +38,15 @@ module.exports = function(app){
 			var appServerService = getService('appServer', req.params.version);
 
 			var success = function(appServer){
-				res.send({ status: res.statusCode, message:"Servidor atualizado com sucesso", id: appServer.id });
+				rest.ok(res, "Servidor criado com sucesso");
 			}
 
 			var error = function(appServer, errors){
 				if(!appServer){
-					res.statusCode = 404;
-					res.send({ status: res.statusCode, message: "Servidor não encontrado" });
+					rest.notFound(res, "Servidor não encontrado");
 				}else{
-					res.statusCode = 400;
-					var errors = validationHandler.buildErrorReport(errors);
-					var errorReport = { status: res.statusCode, message:"Dados inválidos", errors: errors };
-					res.send(errorReport);
+					errors = validationHandler.buildErrorReport(errors);
+					rest.badRequest(res, "Dados inválidos", errors);
 				}
 			}
 
@@ -77,18 +59,25 @@ module.exports = function(app){
 
 			appServerService.remove(req.params.id, function(error){
 				if(error){
-					res.statusCode = 500;
-					res.send({ status: res.statusCode, message: "Erro ao remover Servidor" });
+					rest.serverError(res, "Erro ao remover Servidor");
 				}else{
-					res.send({ status: 200, message: "Servidor removido com sucesso." });
+					rest.ok(res, "Servidor removido com sucesso");
 				}
 			})
+		},
+
+		// Retorna lista de Servidores de aplicação
+		list: function(req, res) {
+			var appServerService = getService('appServer', req.params.version);
+			appServerService.list(req.query, function(appServers){
+				res.json(appServers); 
+			});
 		},
 
 		// Retorna lista de aplicações de um Servidor
 		applications: function(req, res){
 			res.send('show');
-		},
+		}
 	}
 }
 
