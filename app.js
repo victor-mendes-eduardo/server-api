@@ -36,7 +36,6 @@ Bad Request é retornado com mensagem descritiva
 app.all(/^\/(api)\/.*$/, filters.versionFilter);
 app.all(/^\/(api)\/.*$/, filters.basicAuthFilter);
 
-//Loading controllers and routes
 load('controllers').then('routes').into(app)
 
 // catch 404 and forward to error handler
@@ -73,7 +72,5 @@ app.use(function(err, req, res, next) {
 module.exports = app;
 
 var server = app.listen(8080, function () {
-    var host = server.address().address
-    var port = server.address().port
-    console.log('Server API listening at http://%s:%s', host, port)
+    console.log('Server API listening at http://%s:%s', server.address().address, server.address().port)
 })

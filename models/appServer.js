@@ -33,7 +33,9 @@ AppServerSchema.methods.toJson = function() {
 		name: this.name, 
 		status: this.status, 
 		ipAddress: this.ipAddress,
-		tags: this.tags
+		tags: this.tags,
+		creationDate: this.creationDate,
+		lastUpdated: this.lastUpdated
 	}
 }
 

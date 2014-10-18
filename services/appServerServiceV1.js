@@ -1,14 +1,10 @@
 var AppServer = require('../models/appServer')
+var Application = require('../models/application')
 
-exports.show = function (id, callback){
+exports.get = function (id, callback){
 	AppServer.findOne({ '_id':  id }, function (err, appServerModel) {
-		var appServer;
-		if(appServerModel){
-			appServer = appServerModel.toJson();
-		}
-
-		callback(appServer);
-	})
+		callback(appServerModel);
+	});
 };
 
 exports.create = function (reqBody, success, error){
@@ -68,9 +64,27 @@ exports.list = function (params, callback){
 		query.count(function(err,count){
 			response.count = count;
 			callback(response);
-		})
-	})
+		});
+	});
 };
+
+exports.getAppServerApplications = function(appServerId, callback){
+	exports.get(appServerId, function(appServerModel){
+		if(!appServerModel){
+			callback([]);
+		}else{
+			var query = Application.find();
+			query.where('_id').in(appServerModel.applications);
+			query.exec( function(err, applicationModels) {
+				var response = applicationModels.map(function(applicationModel){
+					return applicationModel.toJson();
+				});
+				
+				callback(response);
+			})
+		}
+	});
+}
 
 function buildQueryCriteria(query, params){
 	if(params.name){

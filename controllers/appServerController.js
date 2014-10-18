@@ -8,9 +8,9 @@ module.exports = function(app){
 		show: function(req, res){
 			var appServerService = getService('appServer', req.params.version);
 
-			appServerService.show(req.params.id, function(appServer){
-				if(appServer){
-					res.json(appServer); 
+			appServerService.get(req.params.id, function(appServerModel){
+				if(appServerModel){
+					res.json(appServerModel.toJson()); 
 				}else{
 					rest.notFound(res, "Servidor não encontrado");
 				}
@@ -38,7 +38,7 @@ module.exports = function(app){
 			var appServerService = getService('appServer', req.params.version);
 
 			var success = function(appServer){
-				rest.ok(res, "Servidor criado com sucesso");
+				rest.ok(res, "Servidor atualizado com sucesso");
 			}
 
 			var error = function(appServer, errors){
@@ -74,9 +74,19 @@ module.exports = function(app){
 			});
 		},
 
-		// Retorna lista de aplicações de um Servidor
-		applications: function(req, res){
-			res.send('show');
+		listApplications: function(req, res){
+			var appServerService = getService('appServer', req.params.version);
+			appServerService.getAppServerApplications(req.params.id, function(applications){
+				res.json(applications); 	
+			});
+		},
+
+		addApplication: function(req, res){
+
+		},
+
+		removeApplication: function(req, res){
+
 		}
 	}
 }
