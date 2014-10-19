@@ -1,9 +1,8 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
-var ApplicationSchema = new Schema({
+var ApplicationSchema = new mongoose.Schema({
 	name: { type: String, required: true, notEmpty: true , unique: true },
-	url: { type: String, required: true, notEmpty: true , unique: true }, //TODO: validar URL
+	url: { type: String, required: true, notEmpty: true , unique: true },
 	description: { type: String },
 	creationDate: Date, 
 	lastUpdated: Date
@@ -19,6 +18,9 @@ ApplicationSchema.post('validate', function (appServer) {
 	}
 })
 
+/**
+* Métodos de instancia auxiliares
+*/
 // Representação do objeto para a 'view' para desacoplar do Schema do mongoDB
 ApplicationSchema.methods.toJson = function() {
   return {

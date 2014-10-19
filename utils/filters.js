@@ -26,7 +26,7 @@ exports.basicAuthFilter = function(req, res, next){
 function authenticate(req){
 	var credentials = auth(req);
  	if(credentials){
-	 	for(index in config.users){
+	 	for(var index in config.users){
 	 		var thisUser = config.users[index]
 	 		if(thisUser.username == credentials.name && thisUser.pass == sha1(credentials.pass)){
 	 			return thisUser;

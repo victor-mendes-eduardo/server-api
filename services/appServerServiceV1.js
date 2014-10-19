@@ -13,6 +13,9 @@ exports.create = function (reqBody, success, error){
 
 	appServerModel.save(function(errors){
 		if(!errors) {
+			for (var app in appServerModel.applicationModels) { // Refatorar 
+				appServerModel.applicationModels[app].save()
+			}
 			success(appServerModel);
 		} else {
 			error(appServerModel, errors);
@@ -31,6 +34,9 @@ exports.update = function (id, reqBody, success, error){
 
 		appServerModel.save(function(errors) {
 			if (!errors){
+				for (var app in appServerModel.applicationModels) { // Refatorar 
+					appServerModel.applicationModels[app].save()
+				}
 				success(appServerModel);
 			}else{
 				error(appServerModel, errors);
@@ -74,8 +80,11 @@ exports.getAppServerApplications = function(appServerId, callback){
 			callback([]);
 		}else{
 			var query = Application.find();
+			console.log(appServerModel.applications)
 			query.where('_id').in(appServerModel.applications);
+
 			query.exec( function(err, applicationModels) {
+				console.log(applicationModels)
 				var response = applicationModels.map(function(applicationModel){
 					return applicationModel.toJson();
 				});
