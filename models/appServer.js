@@ -15,7 +15,6 @@ var AppServerSchema = new mongoose.Schema({
 	ipAddress: { type: String, required: true, notEmpty: true, unique: true , match: ipAddressRegex },
 	applications: [{ type: mongoose.Schema.Types.Mixed }],
 	tags: [String], 
-	creationDate: Date, 
 	lastUpdated: Date
 });
 
@@ -24,9 +23,6 @@ AppServerSchema.plugin(require('mongoose-unique-validator'));
 //Atualiza timestamps de criação e atualização após validação do objeto
 AppServerSchema.post('validate', function (appServer) {
 	appServer.lastUpdated = new Date();
-	if(appServer.creationDate == null){
-		appServer.creationDate = new Date();
-	}
 });
 
 /**
@@ -41,7 +37,7 @@ AppServerSchema.methods.toJson = function() {
 		ipAddress: this.ipAddress,
 		tags: this.tags,
 		applications: this.applications,
-		creationDate: this.creationDate,
+		creationDate: this._id.getTimestamp(),
 		lastUpdated: this.lastUpdated
 	}
 }

@@ -22,6 +22,7 @@ describe('Application API', function() {
 	
 
 	describe('Save new Application', function() {
+
 		it('should application be saved successfully', function(done) {
 
 			var application = {
@@ -46,6 +47,7 @@ describe('Application API', function() {
 				done();
 			});
 		});
+
 
 		it('should fail because failed validation', function(done) {
 			var application = {
@@ -73,6 +75,7 @@ describe('Application API', function() {
 			}); 
 		});		
 
+
 		it('should fail because empty post body', function(done) {
 			var application = { }
 
@@ -89,10 +92,12 @@ describe('Application API', function() {
 				done();
 			});
 		});	
+
 	});	
 
 
 	describe('Update an Application', function() {
+
 		it('should update and existing application', function(done) {
 			var application = {
 				"name": "Application #2",
@@ -113,11 +118,13 @@ describe('Application API', function() {
 					done();
 				});
 			});
-		});		
+		});	
+
 	});
 
 
 	describe('List and filter Applications', function() {
+
 		it('should list the collection of applications', function(done) {
 
 			for(var i = 0; i < 50; i++){
@@ -152,6 +159,7 @@ describe('Application API', function() {
 			}, 1000);
 		});
 
+
 		it('should list applications filtering by name', function(done) {
 
 			for(var i = 0; i < 50; i++){
@@ -169,6 +177,7 @@ describe('Application API', function() {
 			}, 1000);
 		});
 
+
 		it('should list applications filtering by url', function(done) {
 
 			for(var i = 0; i < 50; i++){
@@ -185,10 +194,12 @@ describe('Application API', function() {
 				});
 			}, 1000);
 		});
+
 	});
 
 
 	describe('Delete Application', function() {
+
 		it('should delete an application', function(done) {
 			var application = {
 				"name": "Application #1",
@@ -210,10 +221,12 @@ describe('Application API', function() {
 				
 			}); 
 		});	
+
 	});	
 
 
 	describe('Get Application', function() {
+
 		it('should get an application', function(done) {
 			var application = {
 				"name": "Application #1",
@@ -235,5 +248,7 @@ describe('Application API', function() {
 				});
 			}); 
 		});		
+
 	});	
+	
 });

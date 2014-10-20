@@ -84,12 +84,8 @@ module.exports = function(app){
 		addApplication: function(req, res){
 			var appServerService = getService('appServer', req.params.version);
 
-			var success = function(application, appCreated){
-				if(appCreated == false){
-					rest.ok(res, "Aplicação adicionada com sucesso");
-				}else{
-					rest.created(res, "Aplicação criada e adicionada com sucesso", { name: 'application', id: application._id, version: req.params.version });
-				}
+			var success = function(application){
+				rest.created(res, "Aplicação criada e adicionada com sucesso", { name: 'application', id: application._id, version: req.params.version });
 			}
 
 			var error = function(appServer, errors){

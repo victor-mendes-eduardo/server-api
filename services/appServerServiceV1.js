@@ -81,16 +81,15 @@ exports.getAppServerApplications = function(appServerId, callback){
 /**
 Adiciona uma aplicação a um servidor, caso não exista cria uma nova e associa.
 */
-//TODO: reavaliar adição de application se é melhor fazer por id ou name quando nao for criar novo
 exports.addApplication = function(appServerId, reqBody, success, error){
 	exports.get(appServerId, function(appServerModel){
 		if(!appServerModel){
 			error([]);
 		}else{
-			var appSaveSucces = function(applicationModel, created){
+			var appSaveSucces = function(applicationModel){
 				appServerModel.addApplication(applicationModel);
 				appServerModel.save();
-				success(applicationModel, created);
+				success(applicationModel);
 			}
 
 			var appSaveError = function(errors){
@@ -98,15 +97,7 @@ exports.addApplication = function(appServerId, reqBody, success, error){
 			}
 
 			var applicationService = require('./applicationServiceV1')
-
-			//Busca Application por nome, caso não encontre salva uma nova
-			applicationService.list({ name: reqBody.name }, function(applicationModels){
-				if(applicationModels.count > 0){
-					appSaveSucces(applicationModels.applications[0], false)
-				}else{
-					applicationService.create(reqBody, appSaveSucces, appSaveError);
-				}	
-			});
+			applicationService.create(reqBody, appSaveSucces, appSaveError);
 		}
 	});
 }

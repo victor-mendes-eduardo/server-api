@@ -4,7 +4,6 @@ var ApplicationSchema = new mongoose.Schema({
 	name: { type: String, required: true, notEmpty: true , unique: true },
 	url: { type: String, required: true, notEmpty: true , unique: true }, //TODO: validar URL
 	description: { type: String },
-	creationDate: Date, 
 	lastUpdated: Date
 });
 
@@ -13,9 +12,6 @@ ApplicationSchema.plugin(require('mongoose-unique-validator'));
 //Atualiza timestamps de criação e atualização após validação do objeto
 ApplicationSchema.post('validate', function (appServer) {
 	appServer.lastUpdated = new Date();
-	if(appServer.creationDate == null){
-		appServer.creationDate = new Date();
-	}
 })
 
 /**
@@ -28,7 +24,7 @@ ApplicationSchema.methods.toJson = function() {
 		name: this.name, 
 		url: this.url, 
 		description: this.description,
-		creationDate: this.creationDate,
+		creationDate: this._id.getTimestamp(),
 		lastUpdated: this.lastUpdated
 	}
 }
