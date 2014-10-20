@@ -1,5 +1,5 @@
-var AppServer = require('../models/appServer')
-var Application = require('../models/application')
+var AppServer = require('../models/appServer');
+var Application = require('../models/application');
 
 exports.get = function (id, callback){
 	AppServer.findOne({ '_id':  id }, function (err, appServerModel) {
@@ -13,9 +13,6 @@ exports.create = function (reqBody, success, error){
 
 	appServerModel.save(function(errors){
 		if(!errors) {
-			for (var app in appServerModel.applicationModels) { // Refatorar 
-				appServerModel.applicationModels[app].save()
-			}
 			success(appServerModel);
 		} else {
 			error(appServerModel, errors);
@@ -34,9 +31,6 @@ exports.update = function (id, reqBody, success, error){
 
 		appServerModel.save(function(errors) {
 			if (!errors){
-				for (var app in appServerModel.applicationModels) { // Refatorar 
-					appServerModel.applicationModels[app].save()
-				}
 				success(appServerModel);
 			}else{
 				error(appServerModel, errors);
@@ -79,18 +73,75 @@ exports.getAppServerApplications = function(appServerId, callback){
 		if(!appServerModel){
 			callback([]);
 		}else{
-			var query = Application.find();
-			console.log(appServerModel.applications)
-			query.where('_id').in(appServerModel.applications);
+			callback(appServerModel.applications);
+		}
+	});
+}
 
-			query.exec( function(err, applicationModels) {
-				console.log(applicationModels)
-				var response = applicationModels.map(function(applicationModel){
-					return applicationModel.toJson();
-				});
-				
-				callback(response);
-			})
+/**
+Adiciona uma aplicação a um servidor, caso não exista cria uma nova e associa.
+*/
+//TODO: reavaliar adição de application se é melhor fazer por id ou name quando nao for criar novo
+exports.addApplication = function(appServerId, reqBody, success, error){
+	exports.get(appServerId, function(appServerModel){
+		if(!appServerModel){
+			error([]);
+		}else{
+			var appSaveSucces = function(applicationModel, created){
+				appServerModel.addApplication(applicationModel);
+				appServerModel.save();
+				success(applicationModel, created);
+			}
+
+			var appSaveError = function(errors){
+				error(appServerModel, errors);
+			}
+
+			var applicationService = require('./applicationServiceV1')
+
+			//Busca Application por nome, caso não encontre salva uma nova
+			applicationService.list({ name: reqBody.name }, function(applicationModels){
+				if(applicationModels.count > 0){
+					appSaveSucces(applicationModels.applications[0], false)
+				}else{
+					applicationService.create(reqBody, appSaveSucces, appSaveError);
+				}	
+			});
+		}
+	});
+}
+
+exports.addExistingApplication = function(appServerId, applicationId, success, error){
+	exports.get(appServerId, function(appServerModel){
+		if(!appServerModel){
+			error(appServerModel, null);
+		}else{
+			var applicationService = require('./applicationServiceV1')
+
+			applicationService.get(applicationId, function(applicationModel){
+				if(applicationModel){
+					appServerModel.addApplication(applicationModel);
+					appServerModel.save();
+					success(applicationModel);
+				}else{
+					error(appServerModel, applicationModel);
+				}	
+			});
+		}
+	});
+}
+
+/*
+Remove uma aplicação de um servidor mas não de fato a remove do banco
+*/
+exports.removeApplication = function(appServerId, applicationId, success, error){
+	exports.get(appServerId, function(appServerModel){
+		if(!appServerModel){
+			error([]);
+		}else{
+			appServerModel.removeApplication(applicationId);
+			appServerModel.save();
+			success();
 		}
 	});
 }

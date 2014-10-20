@@ -1,4 +1,5 @@
 var Application = require('../models/application');
+var AppServer = require('../models/appServer');
 
 exports.get = function (id, callback){
 	Application.findOne({ '_id':  id }, function (err, applicationModel) {
@@ -8,7 +9,6 @@ exports.get = function (id, callback){
 
 exports.create = function (reqBody, success, error){
 	var applicationModel = new Application();
-	console.log(applicationModel)
 	applicationModel.updateProperties(reqBody);
 
 	applicationModel.save(function(errors){
@@ -40,10 +40,14 @@ exports.update = function (id, reqBody, success, error){
 };
 
 exports.remove = function(id, callback){
-	//TODO: atualizar AppServers que utilizem essa Aplicação
-	Application.remove({ _id: id }, function(err) { callback(err); });
+	Application.remove({ _id: id }, function(err) {
+		if(!err){
+			var objId = new require('mongoose').Types.ObjectId(id)
+			AppServer.update({ }, { $pull: { "applications": { "id":  objId } } });
+		}
+		callback(err); 
+	});
 }
-
 
 /**
 Efetua listagem dos Applicações com filtro pelos campos 'name', 'url'

@@ -11,5 +11,6 @@ module.exports = function(app) {
 	// Routes do sub-recurso 'Application'
 	app.get('/api/:version/appServers/:id/applications', appServerController.listApplications);
 	app.post('/api/:version/appServers/:id/applications', appServerController.addApplication);
-	app.delete('/api/:version/appServers/:id/applications', appServerController.removeApplication);
+	app.delete('/api/:version/appServers/:id/applications/:appId', appServerController.removeApplication);
+	app.post('/api/:version/appServers/:id/applications/:appId', appServerController.addExistingApplication);
 }

@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var ApplicationSchema = new mongoose.Schema({
 	name: { type: String, required: true, notEmpty: true , unique: true },
-	url: { type: String, required: true, notEmpty: true , unique: true },
+	url: { type: String, required: true, notEmpty: true , unique: true }, //TODO: validar URL
 	description: { type: String },
 	creationDate: Date, 
 	lastUpdated: Date

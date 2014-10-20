@@ -215,7 +215,7 @@ describe('Application API', function() {
 
 	describe('Get Application', function() {
 		it('should get an application', function(done) {
-				var application = {
+			var application = {
 				"name": "Application #1",
 				"url": "http://application.com"
 			}
@@ -235,5 +235,5 @@ describe('Application API', function() {
 				});
 			}); 
 		});		
-	});
+	});	
 });

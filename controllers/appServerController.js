@@ -50,7 +50,7 @@ module.exports = function(app){
 				}
 			}
 
-			appServerService.update(req.params.id, req.body, success, error)
+			appServerService.update(req.params.id, req.body, success, error);
 		},
 
 		// Remove um servidor
@@ -82,11 +82,64 @@ module.exports = function(app){
 		},
 
 		addApplication: function(req, res){
+			var appServerService = getService('appServer', req.params.version);
 
+			var success = function(application, appCreated){
+				if(appCreated == false){
+					rest.ok(res, "Aplicação adicionada com sucesso");
+				}else{
+					rest.created(res, "Aplicação criada e adicionada com sucesso", { name: 'application', id: application._id, version: req.params.version });
+				}
+			}
+
+			var error = function(appServer, errors){
+				if(!appServer){
+					rest.notFound(res, "Servidor não encontrado");
+				}else{
+					errors = validationHandler.buildErrorReport(errors);
+					rest.badRequest(res, "Dados inválidos", errors);
+				}
+			}
+
+			appServerService.addApplication(req.params.id, req.body, success, error);
+		},	
+
+		addExistingApplication: function(req, res){
+			var appServerService = getService('appServer', req.params.version);
+
+			var success = function(application, appCreated){
+				rest.ok(res, "Aplicação adicionada com sucesso");
+			}
+
+			var error = function(appServer, application){
+				if(!appServer){
+					rest.notFound(res, "Servidor não encontrado");
+				}else if(!application){
+					rest.notFound(res, "Aplicação não encontrada");
+				}else{
+					rest.serverError(res, "Erro inesperado");
+				}
+			}
+
+			appServerService.addExistingApplication(req.params.id, req.params.appId, success, error);
 		},
 
 		removeApplication: function(req, res){
+			var appServerService = getService('appServer', req.params.version);
 
+			var success = function(){
+				rest.ok(res, "Aplicação removida do Servidor com sucesso");
+			}
+
+			var error = function(appServer, errors){
+				if(!appServer){
+					rest.notFound(res, "Servidor não encontrado");
+				}else{
+					rest.serverError(res, "Erro ao remover aplicação", errors);
+				}
+			}
+
+			appServerService.removeApplication(req.params.id, req.params.appId, success, error);
 		}
 	}
 }
