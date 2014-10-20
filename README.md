@@ -29,8 +29,11 @@ curl --verbose http://victor.mendes:123456@server-api.elasticbeanstalk.com/api/v
 <h3>Filtros</h3>
 
 curl --verbose http://victor.mendes:123456@server-api.elasticbeanstalk.com/api/v1/appServers?name=<nome_do_servidor>
+
 curl --verbose http://victor.mendes:123456@server-api.elasticbeanstalk.com/api/v1/appServers?ipAddress=<endereco_do_servidor>
+
 curl --verbose http://victor.mendes:123456@server-api.elasticbeanstalk.com/api/v1/appServers?status=<status_do_servidor>
+
 curl --verbose http://victor.mendes:123456@server-api.elasticbeanstalk.com/api/v1/appServers?tag=<tag_do_servidor>
 
 <h3>Adicionando uma aplicação nova a um servidor </h3>
@@ -67,6 +70,7 @@ curl --verbose http://victor.mendes:123456@server-api.elasticbeanstalk.com/api/v
 <h3>Filtros</h3>
 
 curl --verbose http://victor.mendes:123456@server-api.elasticbeanstalk.com/api/v1/applications?name=<nome_do_Aplicação>
+
 curl --verbose http://victor.mendes:123456@server-api.elasticbeanstalk.com/api/v1/applications?url=<endereco_do_Aplicação>
 
 <h2>Documentação</h2>
