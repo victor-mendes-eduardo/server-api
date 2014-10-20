@@ -1,8 +1,8 @@
 // Configuração do banco de dados de acordo com os environments
 exports.db = {
-	dev: { url: "mongodb://localhost:27017/server-api", user: "", pass: ""}, 
-	test: { url: "mongodb://localhost:27017/server-api-test", user: "", pass: ""}, 
-	prod: { url: "mongodb://localhost:27017/server-api-prod", user: "", pass: ""}
+	dev: { url: "ds047050.mongolab.com:47050/server-api-dev", user: "victor.mendes", pass: "123456"},
+	test: { url: "ds047020.mongolab.com:47020/server-api-test", user: "victor.mendes", pass: "123456"},
+	prod: { url: "ds047050.mongolab.com:47050/server-api-dev", user: "victor.mendes", pass: "123456"}
 }
 
 //Versões disponiveis na API, a lista 'all', contém todas as versões disponiveis

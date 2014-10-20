@@ -68,6 +68,6 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-var server = app.listen(8080, function () {
+var server = app.listen(process.env.PORT || 3000, function () {
     console.log('Server API listening at http://%s:%s', server.address().address, server.address().port)
 })
