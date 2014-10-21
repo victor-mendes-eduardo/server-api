@@ -7,7 +7,7 @@ var Application = require('../models/application')
 var config = require('../config/config');
 
 describe('App Server API', function() {
-	var url = 'http://victor.mendes:123456@localhost:8080';
+	var url = 'http://victor.mendes:123456@localhost:3000';
 
 	before(function(done) {
 		mongoose.connect(config.db.test.url, function(){
@@ -34,10 +34,10 @@ describe('App Server API', function() {
 			}
 
 			request(url)
-			.post('/api/v1/appServers')
+			.post('/v1/appServers')
 			.send(appServer)
 			.expect('Content-Type', /json/)
-			.expect('Location', /\/api\//)
+			.expect('Location', /appServer/)
 			.expect(201) 
 			.end(function(err, res) {
 				if (err) {
@@ -60,9 +60,9 @@ describe('App Server API', function() {
 				"tags": ["tag1", "tag2"]
 			}
 
-			request(url).post('/api/v1/appServers').send(appServer).end(function(err, res) {
+			request(url).post('/v1/appServers').send(appServer).end(function(err, res) {
 
-				request(url).post('/api/v1/appServers')
+				request(url).post('/v1/appServers')
 				.send(appServer)
 				.expect('Content-Type', /json/)
 				.expect(400) 
@@ -83,7 +83,7 @@ describe('App Server API', function() {
 		it('should fail because empty post body', function(done) {
 			var appServer = { }
 
-			request(url).post('/api/v1/appServers')
+			request(url).post('/v1/appServers')
 			.send(appServer)
 			.expect('Content-Type', /json/)
 			.expect(400) 
@@ -106,7 +106,7 @@ describe('App Server API', function() {
 				"tags": ["tag1", "tag2"]
 			}
 
-			request(url).post('/api/v1/appServers')
+			request(url).post('/v1/appServers')
 			.send(appServer)
 			.expect('Content-Type', /json/)
 			.expect(400) 
@@ -135,10 +135,10 @@ describe('App Server API', function() {
 				"tags": ["tag1", "tag2"]
 			}
 
-			request(url).post('/api/v1/appServers')
+			request(url).post('/v1/appServers')
 			.send(appServer)
 			.end(function(err, res) {
-				request(url).put('/api/v1/appServers/' + res.body.id)
+				request(url).put('/v1/appServers/' + res.body.id)
 				.send(appServer)
 				.expect('Content-Type', /json/)
 				.expect(200) 
@@ -160,11 +160,11 @@ describe('App Server API', function() {
 
 			for(var i = 0; i < 50; i++){
 				var appServer = { "name": "Server #" + i, "status": "RUNNING", "ipAddress": "202.21.21." + i }
-				request(url).post('/api/v1/appServers').send(appServer).end(function(err, res) { });
+				request(url).post('/v1/appServers').send(appServer).end(function(err, res) { });
 			}
 
 			setTimeout(function(){
-				request(url).get('/api/v1/appServers')
+				request(url).get('/v1/appServers')
 				.end(function(err, res) {
 					res.body.count.should.equal(50);
 					res.body.should.have.property('appServers').with.lengthOf(10);
@@ -178,11 +178,11 @@ describe('App Server API', function() {
 
 			for(var i = 0; i < 50; i++){
 				var appServer = { "name": "Server #" + i, "status": "RUNNING", "ipAddress": "202.21.21." + i }
-				request(url).post('/api/v1/appServers').send(appServer).end(function(err, res) { });
+				request(url).post('/v1/appServers').send(appServer).end(function(err, res) { });
 			}
 
 			setTimeout(function(){
-				request(url).get('/api/v1/appServers?max=2')
+				request(url).get('/v1/appServers?max=2')
 				.end(function(err, res) {
 					res.body.count.should.equal(50);
 					res.body.should.have.property('appServers').with.lengthOf(2);
@@ -196,11 +196,11 @@ describe('App Server API', function() {
 
 			for(var i = 0; i < 50; i++){
 				var appServer = { "name": "Server" + i, "status": "RUNNING", "ipAddress": "202.21.21." + i }
-				request(url).post('/api/v1/appServers').send(appServer).end(function(err, res) { });
+				request(url).post('/v1/appServers').send(appServer).end(function(err, res) { });
 			}
 
 			setTimeout(function(){
-				request(url).get('/api/v1/appServers?name=Server1')
+				request(url).get('/v1/appServers?name=Server1')
 				.end(function(err, res) {
 					res.body.count.should.equal(1);
 					res.body.should.have.property('appServers').with.lengthOf(1);
@@ -214,11 +214,11 @@ describe('App Server API', function() {
 
 			for(var i = 0; i < 50; i++){
 				var appServer = { "name": "Server #" + i, "status": "RUNNING", "ipAddress": "202.21.21." + i }
-				request(url).post('/api/v1/appServers').send(appServer).end(function(err, res) { });
+				request(url).post('/v1/appServers').send(appServer).end(function(err, res) { });
 			}
 
 			setTimeout(function(){
-				request(url).get('/api/v1/appServers?ipAddress=202.21.21.10')
+				request(url).get('/v1/appServers?ipAddress=202.21.21.10')
 				.end(function(err, res) {
 					res.body.count.should.equal(1);
 					res.body.should.have.property('appServers').with.lengthOf(1);
@@ -232,11 +232,11 @@ describe('App Server API', function() {
 
 			for(var i = 0; i < 50; i++){
 				var appServer = { "name": "Server #" + i, "status": "RUNNING", "ipAddress": "202.21.21." + i }
-				request(url).post('/api/v1/appServers').send(appServer).end(function(err, res) { });
+				request(url).post('/v1/appServers').send(appServer).end(function(err, res) { });
 			}
 
 			setTimeout(function(){
-				request(url).get('/api/v1/appServers?status=STOPPED')
+				request(url).get('/v1/appServers?status=STOPPED')
 				.end(function(err, res) {
 					res.body.count.should.equal(0);
 					res.body.should.have.property('appServers').with.lengthOf(0);
@@ -258,9 +258,9 @@ describe('App Server API', function() {
 				"tags": ["tag1", "tag2"]
 			}
 
-			request(url).post('/api/v1/appServers').send(appServer).end(function(err, res) {
+			request(url).post('/v1/appServers').send(appServer).end(function(err, res) {
 
-				request(url).delete('/api/v1/appServers/' + res.body.id)
+				request(url).delete('/v1/appServers/' + res.body.id)
 				.send(appServer)
 				.expect('Content-Type', /json/)
 				.expect(200) 
@@ -286,9 +286,9 @@ describe('App Server API', function() {
 				"tags": ["tag1", "tag2"]
 			}
 
-			request(url).post('/api/v1/appServers').send(appServer).end(function(err, res) {
+			request(url).post('/v1/appServers').send(appServer).end(function(err, res) {
 
-				request(url).get('/api/v1/appServers/' + res.body.id)
+				request(url).get('/v1/appServers/' + res.body.id)
 				.send(appServer)
 				.expect('Content-Type', /json/)
 				.expect(200) 
@@ -317,14 +317,14 @@ describe('App Server API', function() {
 			}
 
 			// Cria servidor
-			request(url).post('/api/v1/appServers').send(appServer).end(function(err, res) {
+			request(url).post('/v1/appServers').send(appServer).end(function(err, res) {
 				var application = {
 					"name": "Application #1",
 					"url": "http://application.com"
 				}
 
 				//adiciona nova aplicação ao ervidor criado
-				request(url).post('/api/v1/appServers/' + res.body.id + '/applications')
+				request(url).post('/v1/appServers/' + res.body.id + '/applications')
 				.send(application)
 				.expect('Content-Type', /json/)
 				.expect(201) 
@@ -351,7 +351,7 @@ describe('App Server API', function() {
 			});
 
 			appServer.save(function(){
-				request(url).post('/api/v1/appServers/' + appServer._id + '/applications/' + application._id)
+				request(url).post('/v1/appServers/' + appServer._id + '/applications/' + application._id)
 				.expect('Content-Type', /json/)
 				.expect(200) 
 				.end(function(err, res) {
@@ -380,7 +380,7 @@ describe('App Server API', function() {
 			});
 
 			appServer.save(function(){
-				request(url).delete('/api/v1/appServers/' + appServer._id + '/applications/' + application._id)
+				request(url).delete('/v1/appServers/' + appServer._id + '/applications/' + application._id)
 				.expect('Content-Type', /json/)
 				.expect(200) 
 				.end(function(err, res) {

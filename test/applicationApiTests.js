@@ -6,7 +6,7 @@ var Application = require('../models/application')
 var config = require('../config/config');
 
 describe('Application API', function() {
-	var url = 'http://victor.mendes:123456@localhost:8080';
+	var url = 'http://victor.mendes:123456@localhost:3000';
 
 	before(function(done) {
 		mongoose.connect(config.db.test.url, function(){
@@ -31,10 +31,10 @@ describe('Application API', function() {
 			}
 
 			request(url)
-			.post('/api/v1/applications')
+			.post('/v1/applications')
 			.send(application)
 			.expect('Content-Type', /json/)
-			.expect('Location', /\/api\//)
+			.expect('Location', /application/)
 			.expect(201) 
 			.end(function(err, res) {
 				if (err) {
@@ -57,9 +57,9 @@ describe('Application API', function() {
 				"tags": ["tag1", "tag2"]
 			}
 
-			request(url).post('/api/v1/applications').send(application).end(function(err, res) {
+			request(url).post('/v1/applications').send(application).end(function(err, res) {
 
-				request(url).post('/api/v1/applications')
+				request(url).post('/v1/applications')
 				.send(application)
 				.expect('Content-Type', /json/)
 				.expect(400) 
@@ -79,7 +79,7 @@ describe('Application API', function() {
 		it('should fail because empty post body', function(done) {
 			var application = { }
 
-			request(url).post('/api/v1/applications')
+			request(url).post('/v1/applications')
 			.send(application)
 			.expect('Content-Type', /json/)
 			.expect(400) 
@@ -104,10 +104,10 @@ describe('Application API', function() {
 				"url": "http://application.com"
 			}
 
-			request(url).post('/api/v1/applications')
+			request(url).post('/v1/applications')
 			.send(application)
 			.end(function(err, res) {
-				request(url).put('/api/v1/applications/' + res.body.id)
+				request(url).put('/v1/applications/' + res.body.id)
 				.send(application)
 				.expect('Content-Type', /json/)
 				.expect(200) 
@@ -129,11 +129,11 @@ describe('Application API', function() {
 
 			for(var i = 0; i < 50; i++){
 				var application = { "name": "App" + i, "url": "http://application.com" + i }
-				request(url).post('/api/v1/applications').send(application).end(function(err, res) { });
+				request(url).post('/v1/applications').send(application).end(function(err, res) { });
 			}
 
 			setTimeout(function(){
-				request(url).get('/api/v1/applications')
+				request(url).get('/v1/applications')
 				.end(function(err, res) {
 					res.body.count.should.equal(50);
 					res.body.should.have.property('applications').with.lengthOf(10);
@@ -146,11 +146,11 @@ describe('Application API', function() {
 
 			for(var i = 0; i < 50; i++){
 				var application = { "name": "App" + i, "url": "http://application.com" + i }
-				request(url).post('/api/v1/applications').send(application).end(function(err, res) { });
+				request(url).post('/v1/applications').send(application).end(function(err, res) { });
 			}
 
 			setTimeout(function(){
-				request(url).get('/api/v1/applications?max=2')
+				request(url).get('/v1/applications?max=2')
 				.end(function(err, res) {
 					res.body.count.should.equal(50);
 					res.body.should.have.property('applications').with.lengthOf(2);
@@ -164,11 +164,11 @@ describe('Application API', function() {
 
 			for(var i = 0; i < 50; i++){
 				var application = { "name": "App" + i, "url": "http://application.com" + i }
-				request(url).post('/api/v1/applications').send(application).end(function(err, res) { });
+				request(url).post('/v1/applications').send(application).end(function(err, res) { });
 			}
 
 			setTimeout(function(){
-				request(url).get('/api/v1/applications?name=App1')
+				request(url).get('/v1/applications?name=App1')
 				.end(function(err, res) {
 					res.body.count.should.equal(1);
 					res.body.should.have.property('applications').with.lengthOf(1);
@@ -182,11 +182,11 @@ describe('Application API', function() {
 
 			for(var i = 0; i < 50; i++){
 				var application = { "name": "App" + i, "url": "http://application.com" + i }
-				request(url).post('/api/v1/applications').send(application).end(function(err, res) { });
+				request(url).post('/v1/applications').send(application).end(function(err, res) { });
 			}
 
 			setTimeout(function(){
-				request(url).get('/api/v1/applications?url=http://application.com1')
+				request(url).get('/v1/applications?url=http://application.com1')
 				.end(function(err, res) {
 					res.body.count.should.equal(1);
 					res.body.should.have.property('applications').with.lengthOf(1);
@@ -206,9 +206,9 @@ describe('Application API', function() {
 				"url": "http://application.com"
 			}
 
-			request(url).post('/api/v1/applications').send(application).end(function(err, res) {
+			request(url).post('/v1/applications').send(application).end(function(err, res) {
 
-				request(url).delete('/api/v1/applications/' + res.body.id)
+				request(url).delete('/v1/applications/' + res.body.id)
 				.send(application)
 				.expect('Content-Type', /json/)
 				.expect(200) 
@@ -233,9 +233,9 @@ describe('Application API', function() {
 				"url": "http://application.com"
 			}
 
-			request(url).post('/api/v1/applications').send(application).end(function(err, res) {
+			request(url).post('/v1/applications').send(application).end(function(err, res) {
 
-				request(url).get('/api/v1/applications/' + res.body.id)
+				request(url).get('/v1/applications/' + res.body.id)
 				.send(application)
 				.expect('Content-Type', /json/)
 				.expect(200) 
