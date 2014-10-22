@@ -3,6 +3,15 @@ Server API
 
 API REST para gerenciar um catálogo de servidores de aplicação assim como as aplicações hospedadas nestes.
 
+<h2>Técnologias utilizadas</h2>
+<ul>
+	<li>Javascript / NodeJS</li>
+	<li>ExpressJS</li>
+	<li>MongoDB (Mongolab)</li>
+	<li>Swagger</li>
+	<li>Amazon Web Service (EC2, Elastic Beanstalk)</li>
+</ul>
+
 <h2>Documentação</h2>
 
 A documentação com API explorer encontra-se na URL abaixo:
@@ -77,9 +86,14 @@ curl --verbose http://victor.mendes:123456@server-api-v1.elasticbeanstalk.com/v1
 
 curl --verbose http://victor.mendes:123456@server-api-v1.elasticbeanstalk.com/v1/applications?url={url_da_aplicacao}
 
+<h2>Testes de desempenho</h2>
+Foram realizados testes de desempenho de leitura utilizando o Apache JMeter. 50 Threads fizeram concorrentemente 10 requisições.<br/>
+
+<img src="https://imagizer.imageshack.us/v2/1042x655q90/633/DibB4V.png"/>
+<img src="https://imagizer.imageshack.us/v2/616x387q90/743/7lKeOA.png"/>
 
 <h2>Testes de integração</h2>
-Para rodar os testes é necessário apenas rodar o comando 'npm test' dentro do diretório do projeto.
+Para rodar os testes é necessário apenas rodar o comando 'npm test' dentro do diretório do projeto.<br/>
 
 <h2>Instalando aplicação</h2>
 <ul>
