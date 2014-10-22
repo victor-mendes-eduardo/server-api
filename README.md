@@ -3,7 +3,7 @@ Server API
 
 API REST para gerenciar um catálogo de servidores de aplicação assim como as aplicações hospedadas nestes.
 
-<h2>Técnologias utilizadas</h2>
+<h2>Tecnologias utilizadas</h2>
 <ul>
 	<li>Javascript / NodeJS</li>
 	<li>ExpressJS</li>
