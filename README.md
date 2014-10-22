@@ -89,3 +89,12 @@ Para rodar os testes é necessário apenas rodar o comando 'npm test' dentro do 
 	<li>npm install</li>
 	<li>node app.js</li>
 </ul>
+
+<h2>TODO</h2>
+<ul>
+	<li>Selecionar campos a serem exibidos nos serviços</li>
+	<li>Full text search</li>
+	<li>Usar mongodb na mesma região para reduzir latência</li>
+	<li>Códigos de erros especificos para cada erro de validação</li>
+	<li>Manter histórico das alterações</li>
+</ul>
