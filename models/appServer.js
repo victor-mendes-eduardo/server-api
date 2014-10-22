@@ -78,4 +78,9 @@ AppServerSchema.methods.removeApplication = function(applicationId) {
 	}
 }
 
-module.exports = mongoose.model('AppServer', AppServerSchema);
+var model = mongoose.model('AppServer', AppServerSchema);
+module.exports = model
+
+model.schema.path('name').validate(function (value) {
+	return !value ? true :value.length <= 50;
+}, 'Name should not be longer than 50 characters');
