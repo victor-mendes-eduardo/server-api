@@ -84,7 +84,7 @@ Adiciona uma aplicação a um servidor, caso não exista cria uma nova e associa
 exports.addApplication = function(appServerId, reqBody, success, error){
 	exports.get(appServerId, function(appServerModel){
 		if(!appServerModel){
-			error([]);
+			error(null);
 		}else{
 			var appSaveSucces = function(applicationModel){
 				appServerModel.addApplication(applicationModel);
