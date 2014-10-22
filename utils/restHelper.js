@@ -21,7 +21,7 @@ exports.ok  = function(res, message){
 }
 
 exports.created = function(res, message, resource){
-	res.location('/api/'+ resource.version + '/'+ resource.name +'s/' + resource.id);
+	res.location('/'+ resource.version + '/'+ resource.name +'s/' + resource.id);
 	res.statusCode = statusCodes.CREATED;
 	res.send({ status: res.statusCode, message: message, id: resource.id });
 }

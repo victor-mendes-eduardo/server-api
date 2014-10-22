@@ -15,6 +15,6 @@
     "jade": "~1.6.0"
   },
   "scripts": {
-    "test": "NODE_ENV=test node app.js & node_modules/.bin/mocha"
+    "test": "NODE_ENV=test node app.js & node_modules/.bin/mocha && pkill node"
   }
 }

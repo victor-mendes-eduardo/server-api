@@ -27,14 +27,14 @@ describe('Application API', function() {
 
 			var application = {
 				"name": "Application #1",
-				"url": "htt://application1.com",
+				"url": "http://application1.com",
 			}
 
 			request(url)
 			.post('/v1/applications')
 			.send(application)
 			.expect('Content-Type', /json/)
-			.expect('Location', /application/)
+			.expect('Location', /applications/)
 			.expect(201) 
 			.end(function(err, res) {
 				if (err) {
